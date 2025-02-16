@@ -1,0 +1,18 @@
+---
+- name: Создаем директорию для статики
+  file:
+    path: /var/www/static
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Копируем файлы статики на сервер
+  copy:
+    src: "{{ item }}"
+    dest: /var/www/static/
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  with_fileglob:
+    - "{{ playbook_dir }}/roles/static/files/*" 
