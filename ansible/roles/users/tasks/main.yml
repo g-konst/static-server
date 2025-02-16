@@ -1,0 +1,36 @@
+---
+- name: Создаем кастомные группы
+  group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ custom_groups | default([]) }}"
+
+- name: Управляем пользователями
+  user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
+    state: "{{ item.state }}"
+    groups: "{{ item.groups | join(',') }}"
+    password: "{{ item.password }}"
+    create_home: yes
+    append: yes
+  loop: "{{ users }}"
+
+- name: "Создание директории .ssh для пользователя {{ item.name }}"
+  file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0700'
+  loop: "{{ users }}"
+
+- name: Установить публичный ключ в authorized_keys для пользователя {{ item.name }}
+  copy:
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    content: "{{ item.public_key }}"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0600'
+  loop: "{{ users }}"
+  when: item.public_key is defined and item.public_key != ""
