@@ -4,4 +4,10 @@
   become: yes
   vars_files:
     - vars/main.yml
-  roles: []
+  roles:
+    - users
+    - ssh
+    - utils
+    - ohmyzsh
+    - nginx
+    - static
