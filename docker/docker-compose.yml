@@ -1,0 +1,8 @@
+services:
+
+  static_server:
+    build: .
+    restart: "unless-stopped"
+    ports:
+      - "2201:22"
+      - "80:80"
