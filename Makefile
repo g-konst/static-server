@@ -20,6 +20,9 @@ attach:
 build:
 	$(COMPOSE) up --build
 
+up:
+	$(COMPOSE) up -d
+
 stop:
 	$(COMPOSE) stop
 
