@@ -1,0 +1,36 @@
+---
+- name: Установить пакет zsh для пользователей, использующих zsh
+  apt:
+    name: zsh
+    state: present
+  become: yes
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: item
+  when: "'zsh' in item.shell"
+
+- name: Клонировать oh-my-zsh для пользователя
+  git:
+    repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
+    dest: "/home/{{ item.name }}/.oh-my-zsh"
+    update: yes
+  become: yes
+  become_flags: ""
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: item
+  when: "'zsh' in item.shell"
+  become_user: "{{ item.name }}"
+
+- name: Скопировать шаблон .zshrc для пользователя (если отсутствует)
+  copy:
+    src: zshrc
+    dest: "/home/{{ item.name }}/.zshrc"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0644'
+  become: yes
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: item
+  when: "'zsh' in item.shell"
