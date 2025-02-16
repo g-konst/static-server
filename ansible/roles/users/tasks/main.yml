@@ -16,7 +16,7 @@
     append: yes
   loop: "{{ users }}"
 
-- name: "Создание директории .ssh для пользователя {{ item.name }}"
+- name: Создание директории .ssh для пользователей
   file:
     path: "/home/{{ item.name }}/.ssh"
     state: directory
@@ -25,7 +25,7 @@
     mode: '0700'
   loop: "{{ users }}"
 
-- name: Установить публичный ключ в authorized_keys для пользователя {{ item.name }}
+- name: Установить публичный ключ в authorized_keys для пользователей
   copy:
     dest: "/home/{{ item.name }}/.ssh/authorized_keys"
     content: "{{ item.public_key }}"
