@@ -1,4 +1,4 @@
-.PHONY: ps rm attach build stop playbook ping ssh
+.PHONY: ps rm attach build stop playbook ping ssh up down
 
 COMPOSE = docker-compose -f docker/docker-compose.yml
 CONTAINER = static_server
@@ -25,6 +25,9 @@ up:
 
 stop:
 	$(COMPOSE) stop
+
+down:
+	$(COMPOSE) down
 
 playbook:
 	ANSIBLE_CONFIG=$(ANSIBLE_CONFIG) ansible-playbook -i ansible/inventory.ini ansible/playbook.yml -K
