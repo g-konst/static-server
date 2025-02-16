@@ -1,0 +1,16 @@
+---
+- name: Обновляем кэш apt
+  apt:
+    update_cache: yes
+
+- name: Устанавливаем дополнительные утилиты
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - htop
+    - ncdu
+    - git
+    - nano
+    - vim
+    - acl
