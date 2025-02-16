@@ -1,0 +1,24 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    access_log /var/log/nginx/static_access.log;
+    error_log /var/log/nginx/static_error.log;
+
+    location /images/ {
+        alias /var/www/static/;
+        autoindex on;
+
+        # Включение gzip для изображений
+        gzip on;
+        gzip_types image/jpeg image/png image/gif;
+
+        # Кэширование на 1 час
+        expires 1h;
+    }
+
+    # Редирект для /images без завершающего слеша
+    location /images {
+        return 301 $uri/;
+    }
+}
