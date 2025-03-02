@@ -1,5 +1,10 @@
 ---
 - name: Reload nginx
-  service:
-    name: nginx
-    state: reloaded 
+  shell: |
+    if pgrep nginx > /dev/null; then
+      nginx -s reload
+    else
+      nginx
+    fi
+  listen:
+    - reload-services-1
