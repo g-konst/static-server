@@ -1,0 +1,40 @@
+# Конфигурация OpenSSH для безопасного сервера
+# Автоматически управляется Ansible
+
+# Порт для подключения
+Port 22
+
+# Протоколы и слушающие адреса
+Protocol 2
+ListenAddress 0.0.0.0
+
+# Настройки аутентификации
+PermitRootLogin no
+PermitEmptyPasswords no
+PasswordAuthentication no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+# Разрешенные пользователи
+AllowUsers {{ users | map(attribute="name") | join(" ") }}
+
+# Настройки логирования
+LogLevel VERBOSE
+SyslogFacility AUTH
+
+# Отключение графического перенаправления
+X11Forwarding no
+
+# Настройки безопасности сессий
+ClientAliveInterval 300
+ClientAliveCountMax 2
+MaxAuthTries 3
+MaxSessions 10
+
+# Общие настройки
+UsePAM yes
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server

@@ -1,56 +1,10 @@
 ---
-- name: Отключить вход под root (PermitRootLogin no)
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?PermitRootLogin'
-    line: 'PermitRootLogin no'
+- name: Настройка SSH конфигурации через шаблон
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0644'
     backup: yes
-  notify: Restart ssh
-
-- name: Запретить пустые пароли (PermitEmptyPasswords no)
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?PermitEmptyPasswords'
-    line: 'PermitEmptyPasswords no'
-    backup: yes
-  notify: Restart ssh
-
-- name: Установить уровень логирования VERBOSE
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?LogLevel'
-    line: 'LogLevel VERBOSE'
-    backup: yes
-  notify: Restart ssh
-
-- name: Отключить X11Forwarding
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?X11Forwarding'
-    line: 'X11Forwarding no'
-    backup: yes
-  notify: Restart ssh
-
-- name: Разрешить вход только для определённых пользователей
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?AllowUsers'
-    line: 'AllowUsers {{ users | map(attribute="name") | join(" ") }}'
-    backup: yes
-  notify: Restart ssh
-
-- name: Отключить вход по паролю и разрешить только SSH-ключи
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?PasswordAuthentication'
-    line: 'PasswordAuthentication no'
-    backup: yes
-  notify: Restart ssh
-
-- name: Разрешить вход только по публичным ключам
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^#?PubkeyAuthentication'
-    line: 'PubkeyAuthentication yes'
-    backup: yes
-  notify: Restart ssh
+  notify: reload-services-2

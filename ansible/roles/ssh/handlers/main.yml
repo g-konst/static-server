@@ -1,5 +1,9 @@
 ---
 - name: Restart ssh
-  service:
-    name: ssh
-    state: restarted 
+  shell: |
+    sleep 1 && if pgrep sshd > /dev/null; then pkill sshd; fi && /usr/sbin/sshd &
+  async: 5
+  poll: 0
+  ignore_errors: yes
+  listen:
+    - reload-services-2
