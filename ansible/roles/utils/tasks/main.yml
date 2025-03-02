@@ -3,6 +3,18 @@
   apt:
     update_cache: yes
 
+- name: Обновляем все пакеты системы
+  apt:
+    upgrade: dist
+    autoremove: yes
+    autoclean: yes
+  register: apt_upgrade_result
+
+- name: Выводим информацию о обновленных пакетах
+  debug:
+    var: apt_upgrade_result.stdout_lines
+  when: apt_upgrade_result.stdout_lines is defined
+
 - name: Устанавливаем дополнительные утилиты
   apt:
     name: "{{ item }}"
