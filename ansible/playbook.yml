@@ -11,3 +11,7 @@
     - ohmyzsh
     - nginx
     - static
+
+  tasks:
+  - name: Запустить все обработчики
+    meta: flush_handlers
